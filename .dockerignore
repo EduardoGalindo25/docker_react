@@ -1,0 +1,8 @@
+node_modules
+dist
+.git
+.gitignore
+npm-debug.log
+# Dockerfile y docker-compose.yml se pueden quedar fuera para que la imagen sea más limpia
+Dockerfile
+docker-compose.yml
