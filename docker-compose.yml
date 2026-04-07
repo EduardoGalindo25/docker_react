@@ -3,7 +3,6 @@ services:
     image: volkalabs/portafolio:latest
     build:
       context: .
-      # 1. Automáticamente será 'dev' o 'prod' según la máquina donde esté
       target: ${APP_TARGET} 
     container_name: react_frontend
     restart: unless-stopped
@@ -14,17 +13,12 @@ services:
       - volkalabs_network
     labels:
       - "traefik.enable=true"
-      # 2. El dominio cambia solo
       - "traefik.http.routers.react-app.rule=Host(`${APP_DOMAIN}`)"
-      # 3. HTTP en local, HTTPS en producción
       - "traefik.http.routers.react-app.entrypoints=${TRAEFIK_ENTRYPOINT}"
-      # 4. Puerto 5173 en local, 80 en producción
       - "traefik.http.services.react-app.loadbalancer.server.port=${APP_PORT}"
       
-      # --- MAGIA SSL (Solo se activa si el entrypoint es websecure) ---
-      - "traefik.http.routers.react-app.tls=true"
-      - "traefik.http.routers.react-app.tls.certresolver=letsencrypt"
-
+      - "traefik.http.routers.react-app.tls=${ENABLE_TLS}"
+      - "traefik.http.routers.react-app.tls.certresolver=${CERT_RESOLVER}"
 networks:
   volkalabs_network:
     name: volkalabs
